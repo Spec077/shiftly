@@ -1,0 +1,59 @@
+.launch-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #faf9f7;
+  color: #24211e;
+}
+
+.launch-brand { text-align: center; }
+.launch-logo {
+  display: block;
+  object-fit: contain;
+  margin: 0 auto 24px;
+  border-radius: 28px;
+}
+.launch-wordmark {
+  font-family: 'Arial Black', 'Segoe UI', sans-serif;
+  font-size: clamp(44px, 13vw, 64px);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -3px;
+}
+.launch-i { position: relative; }
+.launch-i > span {
+  position: absolute;
+  width: .19em;
+  height: .19em;
+  left: 50%;
+  top: .16em;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d0ac89, #a97b56);
+}
+.launch-brand p {
+  margin: 12px 0 0;
+  font-size: clamp(13px, 4.3vw, 19px);
+  letter-spacing: .17em;
+  color: #746b64;
+}
+.launch-progress {
+  display: block;
+  width: 64px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #e9e1d8;
+  margin: 38px auto 0;
+}
+.launch-progress > span {
+  display: block;
+  height: 100%;
+  background: #ac8261;
+  transform-origin: left;
+  animation: launch-progress 1.4s ease-out both;
+}
+@keyframes launch-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .launch-progress > span { animation: none; } }
