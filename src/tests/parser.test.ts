@@ -35,6 +35,27 @@ describe('roles and dates', () => {
 })
 
 describe('staffing pipeline', () => {
+  it('accepts mixed rows with and without a hyphen', () => {
+    const result = parseStaffingInput('Niles\nCNA\n09/12 - 1/0/2\n09/13 0/0/2')
+    expect(result.reviewLines).toEqual([])
+    expect(result.records.map(row => [row.facility, row.role, row.date, row.shifts])).toEqual([
+      ['Niles', 'CNA', '09/12', ['AM', 'NOC']],
+      ['Niles', 'CNA', '09/13', ['NOC']],
+    ])
+  })
+  it.each([' ', '   ', '\t', '\u00a0'])('accepts whitespace %j instead of a hyphen and preserves notes', separator => {
+    const originalLine = `9-13${separator}7am-3pm (Call 7p\u20137a)`
+    const result = parseStaffingInput(`Niles\nCNA\n${originalLine}\nRN\n09/14${separator}0/2`)
+    expect(result.reviewLines).toEqual([])
+    expect(result.records[0]).toMatchObject({ date: '09/13', shifts: ['AM'], note: '(Call 7p\u20137a)', originalLine })
+    expect(result.records[1]).toMatchObject({ date: '09/14', shifts: ['PM'] })
+  })
+  it('still reviews invalid dates and shift counts when the hyphen is omitted', () => {
+    const rows = ['13/12 1/0/0', '09/13 ?', '09/14 1/0', '09/15 1/2/3/4']
+    const result = parseStaffingInput(`Niles\nCNA\n${rows.join('\n')}`)
+    expect(result.records).toEqual([])
+    expect(result.reviewLines).toEqual(rows)
+  })
   it('matches the real guide fixture exactly', () => {
     const result = parseStaffingInput(example)
     expect(result.reviewLines).toEqual([])

@@ -28,10 +28,10 @@ export function parseStaffingInput(input: string): ParseResult {
     if (role) { currentRole = role; return }
 
     if (isShiftLine(line)) {
-      const row = /^(\d{1,2}[/-]\d{1,2})\s*-\s*(.+)$/.exec(line)
+      const row = /^(\d{1,2}[/-]\d{1,2})(?:\s*-\s*|\s+)(.+)$/.exec(line)
       const date = row && parseDate(row[1])
       // Extract notes from the original to preserve punctuation and wording.
-      const rawRow = /^(\d{1,2}[/-]\d{1,2})\s*[-\u2010-\u2015\u2212]\s*(.+)$/.exec(originalLine)
+      const rawRow = /^(\d{1,2}[/-]\d{1,2})(?:\s*[-\u2010-\u2015\u2212]\s*|\s+)(.+)$/.exec(originalLine)
       const details = rawRow && extractNote(rawRow[2])
       const shifts = details && currentRole ? parseShift(details.rawShift, currentRole) : null
       if (!currentFacility || !currentRole || !date || !details || !shifts) {
